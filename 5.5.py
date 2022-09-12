@@ -1,25 +1,48 @@
-from collections import defaultdict
-import sys
+x=[int(i) for i in input().split()]
+m=x[0]
+n=x[1]
+Graph=[[i] for i in range(m)]
+visited=[False for i in range(m)]
 
-n, e = list(map(int, input().split()))
-ver = defaultdict(list)
-for i in range(e):
-        a, b = list(map(int, input().split()))
-        ver[a].append(b)
-a,b,c = list(map(int, input().split()))
-if b in ver[a]:
-        print("YES")
-        sys.exit(0)
-stack = [a]
-visited = [0]*n
-while stack:
-        node = stack.pop(0)
-        if node == c: continue
-        visited[node] = 1
-        for i in ver[node]:
-            stack.insert(0, i)
-            if i == b:
-                print("YES")
-                sys.exit(0)
-print("NO")
+for i in range(n):
+	temp=[int(i) for i in input().split()]
+	# print(temp)
+	Graph[temp[0]-1].append(temp[1]-1)
+	# Graph[temp[1]-1].append(temp[0]-1)
+print(Graph)
+t=[int(i) for i in input().split()]
+no_pas=t[2]
+start=t[0]
+end=t[1]
 
+
+c=0
+l=0
+count=[]
+if True:
+	stack=[start]
+	visited[start]=True
+	while len(stack)!=0:
+		val=stack.pop()
+		# if val==no_pas:
+			# continue
+		visited[val]=True
+		count.append(val)
+		for i in Graph[val][1:]:
+			if visited[i]==False:
+				if stack.count(i)==0:
+					# if i==no_pas:
+					# 	continue
+					stack.append(i)
+	if count==m:
+		c+=1
+	l+=1
+# if c==l:
+# 	print('YES')
+# else:
+# 	print('NO')
+print(count)
+if no_pas in count:
+	print('NO')
+else:
+	print('YES')
