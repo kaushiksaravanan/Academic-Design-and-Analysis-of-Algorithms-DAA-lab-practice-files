@@ -1,8 +1,3 @@
-from re import L
-from tracemalloc import start
-from turtle import goto
-
-
 e=int(input())
 graph=[[0 for i in range(e+1)] for i in range(e)]
 for i in graph:
