@@ -8,7 +8,7 @@ r=len(letters)
 ans={}
 while r>=2:
     letters_sorted=list(sorted(letters,key=lambda x:letters[x]))
-    print(letters_sorted)
+    # print(letters_sorted)
     if len(letters)==0:
         break
     l1,n1=letters_sorted[0],letters[letters_sorted[0]]
@@ -53,8 +53,8 @@ while r>=2:
         letters[l1+l2]=n1+n2
         
         
-    print(l1,n1)
-    print(l2,n2)
+    # print(l1,n1)
+    # print(l2,n2)
     del letters[l1]
     del letters[l2]
 
