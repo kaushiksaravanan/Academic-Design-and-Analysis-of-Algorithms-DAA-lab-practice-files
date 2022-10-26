@@ -1,0 +1,286 @@
+
+#-------------------------------------------------------------------------------------------------------
+# CHESS N QUEENS
+
+# Begin
+#    if all columns are filled, then
+#       return true
+#    for each row of the board, do
+#       if isValid(board, i, col), then
+#          set queen at place (i, col) in the board
+#          if solveNQueen(board, col+1) = true, then
+#             return true
+#          otherwise remove queen from place (i, col) from board.
+#    done
+#    return false
+# End
+
+n=8
+board=[['-' for i in range(n)] for i in range(n)]
+# print(board)
+def fill(n,col):
+    if col>=n:
+
+        # To print all possible solutions
+        # print('-----------')
+        # for i in board:
+        #     print(*i)
+        return True
+    for i in range(n):
+        if isvalid(board,n,i,col):
+            board[i][col]='Q'
+            if fill(n,col+1)==True:
+                return True
+            else:
+                board[i][col]='-'
+
+    #To show backtracking
+    # print('-----------')
+    # for i in board:
+    #     print(*i)
+    # return False
+
+def isvalid(board,N,row,col):
+    for i_ in range(col):
+        if board[row][i_]=='Q':
+            return False
+
+    #check diagonal
+    for i, j in zip(range(row, -1, -1),range(col, -1, -1)):
+        if board[i][j] == 'Q':
+            return False
+    for i, j in zip(range(row, N, 1),range(col, -1, -1)):
+        if board[i][j] == 'Q':
+            return False
+    return True
+
+try:    
+    fill(n,0)
+except:
+    print('Not possible')
+# print(board)
+for i in board:
+    print(*i)
+
+
+#-------------------------------------------------------------------------------------------------------
+# M COLOURING GRAPH COLOURING COLORING
+
+
+vertices=4
+n=4
+graph=[[0 for __ in range(vertices)]for _ in range(vertices)]
+colour=[0]*vertices
+def isSafe(row,c):
+        for i in range(vertices):
+            if graph[row][i]==1 and colour[i]==c:
+                return False
+        return True
+def graph_col(i,m):
+    if i!=n:
+        for j in range(1,m+1):
+            if isSafe(i,j):
+                colour[i]=j
+                graph_col(i+1,m)
+
+
+graph=[[0,1,1,1],[1,0,1,0],[1,1,0,1],[1,0,1,0]]
+m=3
+graph_col(0,m)
+n1=len(set(colour))
+if m<=n1:
+    print('Yes')
+else:
+    print('No')
+print(*colour)
+
+#-------------------------------------------------------------------------------------------------------
+# SUB SET SUM   SUBSET SUM
+
+def sum_of_subset(s,k,rem, x, my_list, target_sum):
+    x[k]=1
+    if s+my_list[k]==target_sum:
+        list1=[]
+        for I in range (0,k+1):
+            if x[i]==1:
+                list1.append(my_list[i])
+        print( list1 )       
+    elif s+my_list[k]+my_list[k+1]<=target_sum :
+        sum_of_subset(s+my_list[k],k+1,rem-my_list[k], x, my_list, target_sum)
+    if s+rem-my_list[k]>=target_sum and s+my_list[k+1]<=target_sum :
+        x[k]=0
+        sum_of_subset(s,k+1,rem-my_list[k], x, my_list, target_sum) 
+
+
+
+# # val=[]
+# # def recur_sum_back(index,req,arr,curr_arr):
+# #     r=sum(curr_arr)
+# #     if r>req:
+# #         return False
+# #     # print(curr_arr)
+# #     if sum(curr_arr)==req:
+# #         val.append(curr_arr[:])
+# #     if index>=len(arr):
+# #         return False
+# #     curr_arr.append(arr[index])
+# #     recur_sum_back(index+1,req,arr,curr_arr)
+# #     curr_arr.remove(arr[index])
+# #     recur_sum_back(index+1,req,arr,curr_arr)
+# # recur_sum_back(0,15,[3,5,6,7],[])
+# # print(val)
+
+# x=[0]*4
+# val=[]
+# def btrack(i,n,s,r,elements,m,x):
+#     if i<n:
+#         if s+elements[i]==m:
+#             x[i]=1
+#             val.append(x[:])
+
+
+#         x[i]=1
+#         if s+elements[i]<=m:
+#             btrack(i+1,n,s+elements[i],r-elements[i],elements,m,x)
+#         x[i]=0
+#         if s+elements[i]>=m:
+#             btrack(i+1,n,s,r-elements[i],elements,m,x)
+        
+        
+# btrack(0,4,0,21,[3,5,6,7],8,x)
+# print(val)
+
+
+#-------------------------------------------------------------------------------------------------------
+# SUDOKU SOLVER
+
+def print_grid(arr):
+    for i in range(9):
+        for j in range(9):
+            print (arr[i][j], end = " "),
+        print ()
+def find_empty_location(arr, l):
+    for row in range(9):
+        for col in range(9):
+            if(arr[row][col]== 0):
+                l[0]= row
+                l[1]= col
+                return True
+    return False
+def used_in_row(arr, row, num):
+    for i in range(9):
+        if(arr[row][i] == num):
+            return True
+    return False
+def used_in_col(arr, col, num):
+    for i in range(9):
+        if(arr[i][col] == num):
+            return True
+    return False
+def used_in_box(arr, row, col, num):
+    for i in range(3):
+        for j in range(3):
+            if(arr[i + row][j + col] == num):
+                return True
+    return False
+def check_location_is_safe(arr, row, col, num):
+    return (not used_in_row(arr, row, num) and
+        (not used_in_col(arr, col, num) and
+        (not used_in_box(arr, row - row % 3,
+                        col - col % 3, num))))
+def solve_sudoku(arr):
+    l =[0, 0]
+    if(not find_empty_location(arr, l)):
+        return True
+    row = l[0]
+    col = l[1]
+    for num in range(1, 10):
+        if(check_location_is_safe(arr,
+                        row, col, num)):
+            arr[row][col]= num
+            if(solve_sudoku(arr)):
+                return True
+            arr[row][col] = 0           
+    return False
+
+grid = [[2, 5, 0, 0, 3, 0, 9, 0, 1],
+        [0, 1, 0, 0, 0, 4, 0, 0, 0],
+    [4, 0, 7, 0, 0, 0, 2, 0, 8],
+    [0, 0, 5, 2, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 9, 8, 1, 0, 0],
+    [0, 4, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 0, 3, 6, 0, 0, 7, 2],
+    [0, 7, 0, 0, 0, 0, 0, 0, 3],
+    [9, 0, 3, 0, 0, 0, 6, 0, 4]]
+print_grid(grid)
+print()
+solve_sudoku(grid)
+print_grid(grid)
+
+
+#-------------------------------------------------------------------------------------------------------
+# MAZE RAT 
+
+def isValid(n, maze, x, y, res):
+    if x >= 0 and y >= 0 and x < n and y < n and maze[x][y] == 1 and res[x][y] == 0:
+        return True
+    return False
+def RatMaze(n, maze, move_x, move_y, x, y, res):
+    if x == n-1 and y == n-1:
+        return True
+    for i in range(4):
+        x_new = x + move_x[i]
+        y_new = y + move_y[i]
+        if isValid(n, maze, x_new, y_new, res):
+            res[x_new][y_new] = 1
+            if RatMaze(n, maze, move_x, move_y, x_new, y_new, res):
+                return True
+            res[x_new][y_new] = 0
+    return False 
+def solveMaze(maze):
+    n=len(maze)
+    res = [[0 for i in range(n)] for i in range(n)]
+    res[0][0] = 1# x matrix for each direction
+    move_x = [-1, 1, 0, 0]
+    move_y = [0, 0, -1, 1] 
+    if RatMaze(n, maze, move_x, move_y, 0, 0, res):
+        for i in range(n):
+            for j in range(n):
+                print(res[i][j], end=' ')
+            print()
+    else:
+        print('Solution does  not exist')
+maze=[[0,1,1,1],[0,0,1,0],[0,0,1,1],[0,1,0,1]]
+# print_grid(grid)
+solveMaze(maze)
+# print_grid(grid)
+
+
+#-------------------------------------------------------------------------------------------------------
+
+# HAMILTONIAN CYCLE HAMILTONIAN CYCLE
+
+
+def hsafe(graph, n, v, pos, path):
+    if graph[path[pos-1]][v] == 0: return False
+    if v in path: return False
+    return True
+def hcycleutil(graph, n, path, pos):
+    if pos == n:
+        if graph[path[pos-1]][path[0]]: return True
+        else: return False
+    for v in range(1, n):
+        if hsafe(graph, n, v, pos, path):
+            path[pos] = v
+            if hcycleutil(graph, n, path, pos+1): return True
+            path[pos] = -1
+    return False
+def hamcycle(graph, n):
+    path = [-1] * n
+    path[0] = 0
+    if not hcycleutil(graph, n, path, 1):
+        print("not exit")
+        return
+    print("path :", *path, path[0])
+hamcycle( [ [0, 1, 0, 1, 0], [1, 0, 1, 1, 1],[0, 1, 0, 0, 1,],[1, 1, 0, 0, 1],[0, 1, 1, 1, 0],],5)
+
